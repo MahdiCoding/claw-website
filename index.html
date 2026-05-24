@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLAW — Luxury Streetwear</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500;600&family=Cairo:wght@300;400;600&display=swap" rel="stylesheet" />
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-left">
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()">عربي</button>
+    </div>
+    <div class="nav-logo">
+      <a href="#home">CLAW</a>
+    </div>
+    <div class="nav-right">
+      <a href="#shop" class="nav-link" data-en="Shop" data-ar="المتجر">Shop</a>
+      <a href="#about" class="nav-link" data-en="About" data-ar="من نحن">About</a>
+      <button class="cart-btn" onclick="toggleCart()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <p class="hero-sub" data-en="NEW COLLECTION 2026" data-ar="كولكشن جديد ٢٠٢٦">NEW COLLECTION 2026</p>
+      <h1 class="hero-title">CLAW</h1>
+      <p class="hero-tagline" data-en="Wear the edge." data-ar="إرتدِ الحدّ.">Wear the edge.</p>
+      <a href="#shop" class="btn-primary" data-en="EXPLORE NOW" data-ar="اكتشف الآن">EXPLORE NOW</a>
+    </div>
+    <div class="hero-scratch"></div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>CLAW</span><span>—</span><span>LUXURY STREETWEAR</span><span>—</span>
+      <span>CLAW</span><span>—</span><span>NEW COLLECTION</span><span>—</span>
+      <span>CLAW</span><span>—</span><span>CASH ON DELIVERY</span><span>—</span>
+      <span>CLAW</span><span>—</span><span>LUXURY STREETWEAR</span><span>—</span>
+      <span>CLAW</span><span>—</span><span>NEW COLLECTION</span><span>—</span>
+      <span>CLAW</span><span>—</span><span>CASH ON DELIVERY</span><span>—</span>
+    </div>
+  </div>
+
+  <!-- SHOP -->
+  <section id="shop" class="shop-section">
+    <div class="section-header">
+      <h2 data-en="The Collection" data-ar="الكولكشن">The Collection</h2>
+      <p data-en="Crafted for those who move differently." data-ar="صُمِّم لمن يتحركون بشكل مختلف.">Crafted for those who move differently.</p>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <button class="filter-btn active" data-cat="all" data-en="All" data-ar="الكل" onclick="filterProducts('all', this)">All</button>
+      <button class="filter-btn" data-cat="streetwear" data-en="Streetwear" data-ar="ستريت وير" onclick="filterProducts('streetwear', this)">Streetwear</button>
+      <button class="filter-btn" data-cat="luxury" data-en="Luxury" data-ar="فاخر" onclick="filterProducts('luxury', this)">Luxury</button>
+      <button class="filter-btn" data-cat="accessories" data-en="Accessories" data-ar="إكسسوارات" onclick="filterProducts('accessories', this)">Accessories</button>
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about-section">
+    <div class="about-inner">
+      <div class="about-text">
+        <span class="about-label" data-en="THE BRAND" data-ar="العلامة التجارية">THE BRAND</span>
+        <h2 data-en="Born from the edge of luxury and street." data-ar="وُلد من حافة الفخامة والشارع.">Born from the edge of luxury and street.</h2>
+        <p data-en="CLAW is not just a brand — it's a statement. Every piece is designed to blur the line between high fashion and raw street energy. We make clothing for those who refuse to choose." data-ar="CLAW ليست مجرد علامة تجارية — إنها موقف. كل قطعة مصممة لطمس الحدود بين الموضة الراقية وطاقة الشارع الخام. نصنع ملابس لأولئك الذين يرفضون الاختيار.">CLAW is not just a brand — it's a statement. Every piece is designed to blur the line between high fashion and raw street energy. We make clothing for those who refuse to choose.</p>
+      </div>
+      <div class="about-visual">
+        <div class="about-box">
+          <span class="about-claw-mark">✦</span>
+          <p>EST. 2024</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">CLAW</div>
+      <div class="footer-links">
+        <a href="#shop" data-en="Shop" data-ar="المتجر">Shop</a>
+        <a href="#about" data-en="About" data-ar="من نحن">About</a>
+      </div>
+      <div class="footer-copy" data-en="© 2026 CLAW. All rights reserved." data-ar="© 2026 CLAW. جميع الحقوق محفوظة.">© 2026 CLAW. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- CART SIDEBAR -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3 data-en="Your Bag" data-ar="حقيبتك">Your Bag</h3>
+      <button onclick="toggleCart()" class="cart-close">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-total">
+        <span data-en="Total" data-ar="الإجمالي">Total</span>
+        <span id="cartTotal">EGP 0</span>
+      </div>
+      <button class="btn-primary full-width" onclick="checkout()" data-en="PLACE ORDER — CASH ON DELIVERY" data-ar="اطلب الآن — الدفع عند الاستلام">PLACE ORDER — CASH ON DELIVERY</button>
+    </div>
+  </div>
+
+  <!-- ORDER MODAL -->
+  <div class="modal-overlay" id="orderModal" style="display:none;">
+    <div class="modal-box">
+      <h2 data-en="Complete Your Order" data-ar="أكمل طلبك">Complete Your Order</h2>
+      <p class="modal-sub" data-en="Cash on Delivery — we'll call to confirm." data-ar="الدفع عند الاستلام — سنتصل للتأكيد.">Cash on Delivery — we'll call to confirm.</p>
+      <input type="text" id="orderName" placeholder="Full Name / الاسم الكامل" />
+      <input type="tel" id="orderPhone" placeholder="Phone Number / رقم الهاتف" />
+      <input type="text" id="orderAddress" placeholder="Delivery Address / عنوان التوصيل" />
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="submitOrder()" data-en="CONFIRM ORDER" data-ar="تأكيد الطلب">CONFIRM ORDER</button>
+        <button class="btn-ghost" onclick="closeModal()" data-en="Cancel" data-ar="إلغاء">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div class="modal-overlay" id="successModal" style="display:none;">
+    <div class="modal-box success-box">
+      <div class="success-icon">✦</div>
+      <h2 data-en="Order Placed!" data-ar="تم الطلب!">Order Placed!</h2>
+      <p data-en="Thank you. We'll contact you to confirm your cash on delivery order." data-ar="شكراً لك. سنتصل بك لتأكيد طلبك.">Thank you. We'll contact you to confirm your cash on delivery order.</p>
+      <button class="btn-primary" onclick="closeSuccess()" data-en="CONTINUE SHOPPING" data-ar="متابعة التسوق">CONTINUE SHOPPING</button>
+    </div>
+  </div>
+
+  <script src="products.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
