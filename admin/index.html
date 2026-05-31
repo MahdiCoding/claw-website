@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLAW Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a; --white: #fafafa; --off: #f2f0ed;
+      --accent: #b8a88a; --mid: #888; --border: #e0ddd9;
+      --red: #c0392b; --green: #27ae60;
+    }
+    body { font-family: 'Montserrat', sans-serif; background: var(--off); color: var(--black); min-height: 100vh; }
+    #loginScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .login-box { background: var(--white); padding: 56px 48px; width: 100%; max-width: 400px; text-align: center; }
+    .login-logo { font-family: 'Cormorant Garamond', serif; font-size: 36px; letter-spacing: 10px; font-weight: 600; margin-bottom: 8px; }
+    .login-sub { font-size: 9px; letter-spacing: 3px; color: var(--mid); margin-bottom: 40px; }
+    .login-box input { width: 100%; border: 1px solid var(--border); padding: 13px 16px; font-family: inherit; font-size: 13px; margin-bottom: 12px; outline: none; background: var(--white); color: var(--black); transition: border-color .2s; }
+    .login-box input:focus { border-color: var(--black); }
+    .btn { display: inline-block; background: var(--black); color: var(--white); font-family: inherit; font-size: 10px; font-weight: 600; letter-spacing: 2.5px; padding: 14px 36px; border: 1px solid var(--black); cursor: pointer; transition: background .2s; width: 100%; }
+    .btn:hover { background: var(--accent); border-color: var(--accent); }
+    .btn-ghost { background: none; color: var(--black); border: 1px solid var(--border); font-family: inherit; font-size: 10px; font-weight: 500; letter-spacing: 1.5px; padding: 10px 24px; cursor: pointer; transition: border-color .2s; }
+    .btn-ghost:hover { border-color: var(--black); }
+    .btn-danger { background: var(--red); border-color: var(--red); color: #fff; font-family: inherit; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; padding: 8px 18px; cursor: pointer; border: none; transition: opacity .2s; }
+    .btn-danger:hover { opacity: .85; }
+    .btn-sm { background: var(--black); color: var(--white); border: none; font-family: inherit; font-size: 9px; font-weight: 600; letter-spacing: 1.5px; padding: 8px 16px; cursor: pointer; }
+    .login-error { color: var(--red); font-size: 11px; margin-top: 10px; letter-spacing: .5px; display: none; }
+    #adminPanel { display: none; }
+    .admin-nav { background: var(--black); color: var(--white); display: flex; align-items: center; justify-content: space-between; padding: 18px 40px; }
+    .admin-nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; letter-spacing: 6px; }
+    .admin-nav-right { display: flex; align-items: center; gap: 20px; }
+    .admin-nav-right span { font-size: 10px; color: rgba(255,255,255,.5); letter-spacing: 1.5px; }
+    .admin-nav button { background: none; border: 1px solid rgba(255,255,255,.3); color: var(--white); font-family: inherit; font-size: 9px; letter-spacing: 1.5px; padding: 6px 16px; cursor: pointer; transition: border-color .2s; }
+    .admin-nav button:hover { border-color: #fff; }
+    .admin-body { max-width: 1100px; margin: 0 auto; padding: 48px 32px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 48px; }
+    .stat-card { background: var(--white); padding: 24px; border: 1px solid var(--border); }
+    .stat-label { font-size: 9px; font-weight: 600; letter-spacing: 2px; color: var(--mid); margin-bottom: 8px; text-transform: uppercase; }
+    .stat-val { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; letter-spacing: 3px; }
+    .product-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 56px; }
+    .product-row { background: var(--white); border: 1px solid var(--border); display: grid; grid-template-columns: 60px 1fr 100px 100px 120px 160px; align-items: center; gap: 16px; padding: 16px 20px; transition: border-color .2s; }
+    .product-row:hover { border-color: var(--black); }
+    .product-thumb { width: 50px; height: 60px; background: var(--off); object-fit: cover; display: flex; align-items: center; justify-content: center; font-size: 8px; color: var(--mid); letter-spacing: 2px; overflow: hidden; }
+    .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .product-name-cell h4 { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+    .product-name-cell p { font-size: 10px; color: var(--mid); }
+    .product-price-cell { font-size: 12px; font-weight: 500; }
+    .product-price-cell .sale { color: var(--red); }
+    .product-price-cell .original { text-decoration: line-through; color: var(--mid); font-size: 10px; }
+    .badge-cell span { font-size: 8px; font-weight: 700; letter-spacing: 1.5px; padding: 3px 8px; background: var(--black); color: #fff; }
+    .badge-cell span.sold { background: var(--mid); }
+    .badge-cell span.sale-b { background: var(--red); }
+    .product-actions { display: flex; gap: 8px; }
+    .form-section { background: var(--white); border: 1px solid var(--border); padding: 40px; margin-bottom: 48px; }
+    .form-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; letter-spacing: 3px; margin-bottom: 32px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--mid); }
+    .form-group input, .form-group select { border: 1px solid var(--border); padding: 11px 14px; font-family: inherit; font-size: 13px; outline: none; background: var(--white); color: var(--black); transition: border-color .2s; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--black); }
+    .sizes-check { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .size-opt { display: flex; align-items: center; gap: 6px; font-size: 11px; cursor: pointer; }
+    .size-opt input { width: auto; padding: 0; border: none; }
+    .toggle-wrap { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+    .toggle { position: relative; width: 44px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--border); cursor: pointer; transition: .3s; }
+    .toggle-slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: white; transition: .3s; }
+    .toggle input:checked + .toggle-slider { background: var(--black); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+    .form-actions { display: flex; gap: 12px; margin-top: 28px; }
+    .success-msg { background: #eafaf1; border: 1px solid #27ae60; color: #1e8449; font-size: 11px; padding: 10px 16px; letter-spacing: .5px; display: none; margin-top: 12px; }
+    .img-preview { width: 80px; height: 96px; background: var(--off); object-fit: cover; margin-top: 8px; display: none; }
+  </style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">CLAW</div>
+    <p class="login-sub">ADMIN PANEL</p>
+    <input type="password" id="pwInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()" />
+    <button class="btn" onclick="login()">ENTER</button>
+    <p class="login-error" id="loginError">Incorrect password. Try again.</p>
+  </div>
+</div>
+
+<div id="adminPanel">
+  <nav class="admin-nav">
+    <div class="admin-nav-logo">CLAW</div>
+    <div class="admin-nav-right">
+      <span>ADMIN PANEL</span>
+      <button onclick="logout()">LOG OUT</button>
+      <a href="/" style="color:rgba(255,255,255,.6);font-size:10px;letter-spacing:1.5px;text-decoration:none;" target="_blank">VIEW SITE ↗</a>
+    </div>
+  </nav>
+  <div class="admin-body">
+    <div class="stats" id="statsRow"></div>
+    <div class="section-header">
+      <h2 class="section-title">Products</h2>
+      <button class="btn" onclick="showAddForm()" style="padding:12px 28px;font-size:10px;">+ ADD PRODUCT</button>
+    </div>
+    <div class="product-list" id="productList"></div>
+    <div class="form-section" id="productForm" style="display:none;">
+      <h3 class="form-title" id="formTitle">Add New Product</h3>
+      <input type="hidden" id="editId" value="" />
+      <div class="form-grid">
+        <div class="form-group"><label>Name (English)</label><input type="text" id="fName" placeholder="CLAW Oversized Tee" /></div>
+        <div class="form-group"><label>Name (Arabic)</label><input type="text" id="fNameAr" placeholder="تيشيرت أوفرسايز" dir="rtl" /></div>
+        <div class="form-group"><label>Price (EGP)</label><input type="number" id="fPrice" placeholder="850" /></div>
+        <div class="form-group"><label>Sale Price — leave 0 for no sale</label><input type="number" id="fSalePrice" placeholder="0" value="0" /></div>
+        <div class="form-group"><label>Category</label><select id="fCategory"><option value="streetwear">Streetwear</option><option value="luxury">Luxury</option><option value="accessories">Accessories</option></select></div>
+        <div class="form-group"><label>Badge</label><select id="fBadge"><option value="">None</option><option value="NEW">NEW</option><option value="LIMITED">LIMITED</option><option value="BESTSELLER">BESTSELLER</option><option value="SALE">SALE</option><option value="SOLD OUT">SOLD OUT</option></select></div>
+        <div class="form-group full"><label>Sizes</label><div class="sizes-check"><label class="size-opt"><input type="checkbox" value="XS" /> XS</label><label class="size-opt"><input type="checkbox" value="S" /> S</label><label class="size-opt"><input type="checkbox" value="M" /> M</label><label class="size-opt"><input type="checkbox" value="L" /> L</label><label class="size-opt"><input type="checkbox" value="XL" /> XL</label><label class="size-opt"><input type="checkbox" value="XXL" /> XXL</label><label class="size-opt"><input type="checkbox" value="ONE SIZE" /> ONE SIZE</label></div></div>
+        <div class="form-group full"><label>Product Image URL</label><input type="text" id="fImage" placeholder="https://... or images/myfile.jpg" oninput="previewImg()" /><img class="img-preview" id="imgPreview" /></div>
+        <div class="form-group full"><label>Sold Out?</label><div class="toggle-wrap"><label class="toggle"><input type="checkbox" id="fSoldOut" /><span class="toggle-slider"></span></label><span style="font-size:12px;color:var(--mid);">Toggle ON to mark as sold out</span></div></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn" onclick="saveProduct()">SAVE PRODUCT</button>
+        <button class="btn-ghost" onclick="cancelForm()">CANCEL</button>
+      </div>
+      <p class="success-msg" id="successMsg">✓ Product saved successfully.</p>
+    </div>
+    <div style="border-top:1px solid var(--border);padding-top:32px;margin-top:16px;">
+      <p style="font-size:11px;color:var(--mid);letter-spacing:1px;margin-bottom:12px;">SECURITY</p>
+      <button class="btn-ghost" onclick="changePassword()">CHANGE ADMIN PASSWORD</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEFAULT_PW = 'claw2024';
+function getPassword() { return localStorage.getItem('claw_admin_pw') || DEFAULT_PW; }
+function login() {
+  const input = document.getElementById('pwInput').value;
+  if (input === getPassword()) {
+    sessionStorage.setItem('claw_authed', '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    renderAll();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('pwInput').value = '';
+  }
+}
+function logout() { sessionStorage.removeItem('claw_authed'); location.reload(); }
+function changePassword() {
+  const np = prompt('Enter new admin password (min 6 characters):');
+  if (!np || np.length < 6) { alert('Password too short.'); return; }
+  const confirm = prompt('Confirm new password:');
+  if (np !== confirm) { alert('Passwords do not match.'); return; }
+  localStorage.setItem('claw_admin_pw', np);
+  alert('Password changed!');
+}
+if (sessionStorage.getItem('claw_authed')) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('adminPanel').style.display = 'block'; }
+function getProducts() {
+  const stored = localStorage.getItem('claw_products');
+  if (stored) return JSON.parse(stored);
+  return [
+    { id:1, name:"CLAW Oversized Tee", nameAr:"تيشيرت أوفرسايز CLAW", price:850, salePrice:0, soldOut:false, category:"streetwear", image:"", sizes:["S","M","L","XL"], badge:"NEW" },
+    { id:2, name:"Minimal Logo Hoodie", nameAr:"هودي بشعار بسيط", price:1450, salePrice:0, soldOut:false, category:"streetwear", image:"", sizes:["S","M","L","XL","XXL"], badge:"" },
+    { id:3, name:"Wide Leg Cargo Pants", nameAr:"بنطال كارجو واسع", price:1200, salePrice:899, soldOut:false, category:"streetwear", image:"", sizes:["S","M","L","XL"], badge:"SALE" },
+    { id:4, name:"CLAW Structured Blazer", nameAr:"بليزر CLAW المنظم", price:2800, salePrice:0, soldOut:false, category:"luxury", image:"", sizes:["S","M","L","XL"], badge:"LIMITED" },
+    { id:5, name:"Silk Blend Shirt", nameAr:"قميص حرير", price:1900, salePrice:0, soldOut:true, category:"luxury", image:"", sizes:["S","M","L","XL"], badge:"SOLD OUT" },
+    { id:6, name:"CLAW Signature Cap", nameAr:"كاب CLAW المميز", price:450, salePrice:0, soldOut:false, category:"accessories", image:"", sizes:["ONE SIZE"], badge:"NEW" },
+    { id:7, name:"Leather Crossbody Bag", nameAr:"شنطة جلد كروس بودي", price:1650, salePrice:0, soldOut:false, category:"accessories", image:"", sizes:["ONE SIZE"], badge:"" },
+    { id:8, name:"CLAW Chain Necklace", nameAr:"سلسلة CLAW", price:550, salePrice:0, soldOut:false, category:"accessories", image:"", sizes:["ONE SIZE"], badge:"NEW" }
+  ];
+}
+function saveProducts(p) { localStorage.setItem('claw_products', JSON.stringify(p)); }
+function renderAll() { renderStats(); renderProductList(); }
+function renderStats() {
+  const p = getProducts();
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><p class="stat-label">Total Products</p><p class="stat-val">${p.length}</p></div>
+    <div class="stat-card"><p class="stat-label">Sold Out</p><p class="stat-val">${p.filter(x=>x.soldOut).length}</p></div>
+    <div class="stat-card"><p class="stat-label">On Sale</p><p class="stat-val">${p.filter(x=>x.salePrice>0).length}</p></div>
+    <div class="stat-card"><p class="stat-label">Categories</p><p class="stat-val">${[...new Set(p.map(x=>x.category))].length}</p></div>`;
+}
+function renderProductList() {
+  const products = getProducts();
+  const list = document.getElementById('productList');
+  if (!products.length) { list.innerHTML = '<p style="color:var(--mid);font-size:12px;padding:24px 0;">No products yet.</p>'; return; }
+  list.innerHTML = products.map(p => {
+    const badgeClass = p.soldOut ? 'sold' : (p.salePrice > 0 ? 'sale-b' : '');
+    const badgeText = p.soldOut ? 'SOLD OUT' : p.badge;
+    const priceHtml = p.salePrice > 0 ? `<span class="original">EGP ${p.price.toLocaleString()}</span><br><span class="sale">EGP ${p.salePrice.toLocaleString()}</span>` : `EGP ${p.price.toLocaleString()}`;
+    const imgHtml = p.image ? `<div class="product-thumb"><img src="${p.image}" onerror="this.parentElement.innerHTML='CLAW'" /></div>` : `<div class="product-thumb">CLAW</div>`;
+    return `<div class="product-row">${imgHtml}<div class="product-name-cell"><h4>${p.name}</h4><p>${p.nameAr} · ${p.category}</p><p style="margin-top:2px;">${p.sizes.join(', ')}</p></div><div class="product-price-cell">${priceHtml}</div><div class="badge-cell">${badgeText?`<span class="${badgeClass}">${badgeText}</span>`:'<span style="color:var(--mid);font-size:10px;">—</span>'}</div><div><button class="btn-sm" style="background:${p.soldOut?'var(--mid)':'var(--black)'};margin-bottom:4px;width:100%;" onclick="toggleSoldOut(${p.id})">${p.soldOut?'MARK IN STOCK':'MARK SOLD OUT'}</button></div><div class="product-actions"><button class="btn-sm" onclick="editProduct(${p.id})">EDIT</button><button class="btn-danger" onclick="deleteProduct(${p.id})">DELETE</button></div></div>`;
+  }).join('');
+}
+function showAddForm() {
+  document.getElementById('formTitle').textContent='Add New Product'; document.getElementById('editId').value='';
+  ['fName','fNameAr','fImage'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fPrice').value=''; document.getElementById('fSalePrice').value='0';
+  document.getElementById('fCategory').value='streetwear'; document.getElementById('fBadge').value='';
+  document.getElementById('fSoldOut').checked=false; document.getElementById('imgPreview').style.display='none';
+  document.querySelectorAll('.sizes-check input').forEach(cb=>cb.checked=false);
+  document.getElementById('successMsg').style.display='none';
+  document.getElementById('productForm').style.display='block';
+  document.getElementById('productForm').scrollIntoView({behavior:'smooth'});
+}
+function editProduct(id) {
+  const p = getProducts().find(x=>x.id===id); if(!p) return;
+  document.getElementById('formTitle').textContent='Edit Product'; document.getElementById('editId').value=id;
+  document.getElementById('fName').value=p.name; document.getElementById('fNameAr').value=p.nameAr;
+  document.getElementById('fPrice').value=p.price; document.getElementById('fSalePrice').value=p.salePrice||0;
+  document.getElementById('fCategory').value=p.category; document.getElementById('fBadge').value=p.badge||'';
+  document.getElementById('fImage').value=p.image||''; document.getElementById('fSoldOut').checked=p.soldOut||false;
+  document.querySelectorAll('.sizes-check input').forEach(cb=>cb.checked=p.sizes.includes(cb.value));
+  previewImg(); document.getElementById('successMsg').style.display='none';
+  document.getElementById('productForm').style.display='block';
+  document.getElementById('productForm').scrollIntoView({behavior:'smooth'});
+}
+function cancelForm() { document.getElementById('productForm').style.display='none'; }
+function saveProduct() {
+  const name=document.getElementById('fName').value.trim(), nameAr=document.getElementById('fNameAr').value.trim();
+  const price=parseInt(document.getElementById('fPrice').value), salePrice=parseInt(document.getElementById('fSalePrice').value)||0;
+  const category=document.getElementById('fCategory').value, badge=document.getElementById('fBadge').value;
+  const image=document.getElementById('fImage').value.trim(), soldOut=document.getElementById('fSoldOut').checked;
+  const sizes=[...document.querySelectorAll('.sizes-check input:checked')].map(cb=>cb.value);
+  if(!name||!nameAr||!price){alert('Please fill in name (EN + AR) and price.');return;}
+  if(!sizes.length){alert('Please select at least one size.');return;}
+  const products=getProducts(), editId=document.getElementById('editId').value;
+  if(editId){const idx=products.findIndex(p=>p.id===parseInt(editId));if(idx>-1)products[idx]={...products[idx],name,nameAr,price,salePrice,category,badge,image,soldOut,sizes};}
+  else{const newId=products.length>0?Math.max(...products.map(p=>p.id))+1:1;products.push({id:newId,name,nameAr,price,salePrice,category,badge,image,soldOut,sizes});}
+  saveProducts(products); document.getElementById('successMsg').style.display='block';
+  setTimeout(()=>{document.getElementById('productForm').style.display='none';renderAll();},1200);
+}
+function deleteProduct(id){if(!confirm('Delete this product?'))return;saveProducts(getProducts().filter(p=>p.id!==id));renderAll();}
+function toggleSoldOut(id){const products=getProducts(),p=products.find(x=>x.id===id);if(!p)return;p.soldOut=!p.soldOut;if(p.soldOut){p.badge='SOLD OUT';}else{if(p.badge==='SOLD OUT')p.badge='';}saveProducts(products);renderAll();}
+function previewImg(){const url=document.getElementById('fImage').value.trim(),preview=document.getElementById('imgPreview');if(url){preview.src=url;preview.style.display='block';}else{preview.style.display='none';}}
+if(sessionStorage.getItem('claw_authed'))renderAll();
+</script>
+</body>
+</html>
